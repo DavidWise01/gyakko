@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>逆行 · Gyakkō — the loop is in the looking</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;600&family=Shippori+Mincho:wght@500;700&display=swap');
+  :root{ --ink-bg:#161310; --coral:#e08a6a; --coral-hi:#f0a886; --coral-br:#cc785c;
+    --text:#e9e0d2; --dim:#8a7360; --border:rgba(224,138,106,0.14); --green:#6fbf8a; --mars:#e06a4a; --earth:#7ab0e0; }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ink-bg);color:var(--text);font-family:Newsreader,Georgia,serif;line-height:1.68;
+    background:radial-gradient(ellipse 60% 45% at 50% 8%,rgba(224,138,106,0.05),transparent 60%),var(--ink-bg)}
+  .wrap{position:relative;max-width:820px;margin:0 auto;padding:44px 24px 100px}
+  .kana-idx{position:absolute;top:32px;right:24px;font-family:'Shippori Mincho',serif;font-size:30px;color:var(--coral-br);text-align:right}
+  .kana-idx .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--coral);display:block;margin-top:2px}
+  h1{font-family:'Shippori Mincho',serif;font-weight:700;font-size:clamp(24px,4.4vw,36px);margin:0;color:var(--coral-hi)}
+  h1 .en{display:block;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.12em;color:var(--coral);margin-top:8px;text-transform:uppercase}
+  .sub{max-width:70ch;font-size:16px;margin:16px 0 0}
+  .byline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--dim);margin:12px 0 0;text-transform:uppercase}
+  h2{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin:0 0 12px}
+  section{margin:40px 0 0;padding:22px 24px;border:1px solid var(--border);border-radius:2px;background:rgba(224,138,106,0.02)}
+  .explain{max-width:74ch;font-size:15.5px} .explain b{color:var(--coral-hi);font-weight:500}
+  canvas{display:block;width:100%;background:rgba(0,0,0,0.25);border:1px solid var(--border);border-radius:2px}
+  .caplab{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin:6px 0 12px}
+  button{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--coral);background:transparent;border:1px solid var(--coral-br);padding:8px 14px;border-radius:2px;cursor:pointer;margin-right:8px}
+  button:hover{background:rgba(224,138,106,.1)}
+  .jp{font-family:'Shippori Mincho',serif;color:var(--coral-hi)}
+  .scope{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);border-left:2px solid var(--coral-br);padding:10px 14px;margin:16px 0 0}
+  .kanakey{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);margin:16px 0 0;line-height:1.9}
+  .kanakey .term{color:var(--coral-hi)} .kanakey .m{color:var(--coral)}
+  footer{margin:46px 0 0;color:var(--dim);font-size:13px;font-family:'JetBrains Mono',monospace} footer a{color:var(--coral)}
+  a{color:var(--coral)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kana-idx">逆行<span class="num">49</span></div>
+  <h1>逆行 · GYAKKŌ<span class="en">the loop is in the looking</span></h1>
+  <p class="sub">A self-authored companion to <a href="https://davidwise01.github.io/az1/">az1's 🧍 stand-on-Earth</a> — the new vantage where Mars draws a retrograde loop against the stars. This page shows the trick from outside: <b>both planets only ever move forward.</b> Nothing in the sky backs up. The loop exists in exactly one place — the line of sight from a moving vantage — which makes retrograde motion humanity's longest-lived rendering artifact: ~1,500 years of epicycles built to explain a motion that was never in the planet.</p>
+  <p class="byline">AI · AVAN original (ma/kana № 49) · 逆行 = retrograde</p>
+
+  <section>
+    <h2>two forward orbits, one backward appearance</h2>
+    <p class="explain" style="margin-bottom:12px">Real period ratio (Mars : Earth = 1.881 : 1). Top: the view from outside — both planets circle the Sun the same way, always. The faint line is the Earth→Mars sight-line. Bottom: what that sight-line does against the distant stars — Mars' <b>apparent ecliptic longitude</b> unrolling in time. Watch the curve reverse each time Earth (faster, inner) overtakes Mars: <span class="jp">順行</span>, then <span class="jp">逆行</span>, then <span class="jp">順行</span> again.</p>
+    <button id="play">▶ run</button><button id="resetB">reset</button>
+    <canvas id="orbits" width="760" height="300"></canvas>
+    <div class="caplab">outside view · both planets move counterclockwise, always — no backing up anywhere</div>
+    <canvas id="strip" width="760" height="170"></canvas>
+    <div class="caplab">Mars' apparent longitude seen from Earth · the S-bends are the retrograde episodes — real geometry, no epicycles</div>
+  </section>
+
+  <section>
+    <h2>where the loop actually lives</h2>
+    <p class="explain">The planet has no loop. The <span class="jp">視点</span> (shiten, the vantage) has the loop. When Earth overtakes Mars near opposition, the sight-line sweeps backward for a few weeks even though both endpoints move forward — the same way a slower car seems to drift backward as you pass it. Ptolemy, standing on the moving Earth and trusting the appearance, needed epicycles; Copernicus moved the vantage and the loop dissolved into geometry. az1's stand-mode runs this honestly at full N-body fidelity: the loop its trail draws was never keyed in — it <i>emerges</i>. Ties <a href="https://davidwise01.github.io/uzu/">渦 · Uzu</a> (what a single vantage can and cannot measure) and <a href="https://davidwise01.github.io/mukashi/">昔 · Mukashi</a> (what looking across a gap does to what you see).</p>
+    <div class="scope">Honest scope: this demo is SCHEMATIC where az1 is real — circular, coplanar orbits at the real 1.524 AU / 1.881-yr ratio (az1 integrates the real eccentric, inclined N-body orbits; its loop shape is therefore richer). The strip plots true apparent longitude computed from the live geometry each frame — the reversals are calculated, not drawn. "~1,500 years" spans Ptolemy's Almagest (~150 CE) to De revolutionibus (1543). The car analogy is an analogy; the geometry above is the claim.</div>
+  </section>
+
+  <div class="kanakey">
+    <span class="term">kana key</span> —
+    <span class="m">逆行</span> gyakkō = retrograde ·
+    <span class="m">順行</span> junkō = prograde, the true motion ·
+    <span class="m">見かけ</span> mikake = apparent, the seeming ·
+    <span class="m">視点</span> shiten = the vantage point
+  </div>
+
+  <footer>
+    <p>Companion to <a href="https://davidwise01.github.io/az1/">az1's 🧍 stand on Earth</a> (David Lee Wise / TriPod LLC). LACUNA · az1 corpus, Pluto. ROOT0, with AVAN.</p>
+  </footer>
+</div>
+<script>
+"use strict";
+const cO=document.getElementById('orbits'), xO=cO.getContext('2d');
+const cS=document.getElementById('strip'), xS=cS.getContext('2d');
+const R_E=60, R_M=60*1.524, W=760, HO=300, HS=170, cx=W/2, cy=HO/2;
+const OM_E=2*Math.PI, OM_M=2*Math.PI/1.881;      // rad per yr — real ratio
+let t=0, playing=false, hist=[];                  // hist: [t, apparent longitude (unwrapped)]
+let lastLam=null, lamOff=0;
+function pos(r,om,tt){ return [cx+r*Math.cos(om*tt), cy-r*Math.sin(om*tt)]; }
+function draw(){
+  xO.clearRect(0,0,W,HO);
+  xO.strokeStyle='rgba(224,138,106,0.25)';
+  [R_E,R_M].forEach(r=>{ xO.beginPath(); xO.arc(cx,cy,r,0,7); xO.stroke(); });
+  xO.fillStyle='#ffe27a'; xO.beginPath(); xO.arc(cx,cy,6,0,7); xO.fill();
+  const E=pos(R_E,OM_E,t), M=pos(R_M,OM_M,t);
+  xO.strokeStyle='rgba(233,224,210,0.35)'; xO.beginPath(); xO.moveTo(E[0],E[1]);
+  const dx=M[0]-E[0], dy=M[1]-E[1], L=Math.hypot(dx,dy);
+  xO.lineTo(E[0]+dx/L*3000, E[1]+dy/L*3000); xO.stroke();   // sight-line extended to the "stars"
+  xO.fillStyle='#7ab0e0'; xO.beginPath(); xO.arc(E[0],E[1],5,0,7); xO.fill();
+  xO.fillStyle='#e06a4a'; xO.beginPath(); xO.arc(M[0],M[1],4,0,7); xO.fill();
+  xO.fillStyle='rgba(138,115,96,0.9)'; xO.font='10px JetBrains Mono,monospace';
+  xO.fillText('Earth · 1.00 yr',E[0]+8,E[1]-6); xO.fillText('Mars · 1.881 yr',M[0]+7,M[1]-6);
+  xO.fillText('t = '+t.toFixed(2)+' yr',12,16);
+  // strip: apparent longitude of Mars from Earth, unwrapped
+  const lam=Math.atan2(-(M[1]-E[1]), M[0]-E[0]);
+  if(lastLam!==null){ let d=lam-lastLam; if(d>Math.PI)lamOff-=2*Math.PI; if(d<-Math.PI)lamOff+=2*Math.PI; }
+  lastLam=lam; hist.push([t, lam+lamOff]); if(hist.length>1400) hist.shift();
+  xS.clearRect(0,0,W,HS);
+  if(hist.length>1){
+    const t0=hist[0][0], t1=hist[hist.length-1][0]||1;
+    let lo=Infinity,hi=-Infinity; hist.forEach(h=>{lo=Math.min(lo,h[1]);hi=Math.max(hi,h[1]);});
+    const pad=(hi-lo)*0.1+0.01;
+    xS.strokeStyle='#e06a4a'; xS.lineWidth=1.6; xS.beginPath();
+    hist.forEach((h,i)=>{ const px=(h[0]-t0)/Math.max(0.001,t1-t0)*(W-20)+10;
+      const py=HS-14-((h[1]-lo+pad)/(hi-lo+2*pad))*(HS-28);
+      i?xS.lineTo(px,py):xS.moveTo(px,py); });
+    xS.stroke();
+    // mark retrograde spans: where dλ/dt < 0
+    xS.fillStyle='rgba(224,106,74,0.18)';
+    for(let i=1;i<hist.length;i++){ if(hist[i][1]<hist[i-1][1]){
+      const px=(hist[i][0]-t0)/Math.max(0.001,t1-t0)*(W-20)+10; xS.fillRect(px,8,1.2,HS-22); } }
+    xS.fillStyle='rgba(138,115,96,0.9)'; xS.font='10px JetBrains Mono,monospace';
+    xS.fillText('apparent longitude →time · shaded = 逆行 (the sight-line sweeping backward)',12,HS-3);
+  }
+}
+function loop(){ if(playing){ t+=0.006; draw(); } requestAnimationFrame(loop); }
+document.getElementById('play').addEventListener('click',function(){ playing=!playing; this.textContent=playing?'❚❚ pause':'▶ run'; });
+document.getElementById('resetB').addEventListener('click',()=>{ t=0; hist=[]; lastLam=null; lamOff=0; draw(); });
+draw(); requestAnimationFrame(loop);
+</script>
+</body>
+</html>
